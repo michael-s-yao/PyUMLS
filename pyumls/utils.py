@@ -14,7 +14,7 @@ from . import base
 
 def parse_json_results(
     results: Union[Dict[str, Any], Sequence[Dict[str, Any]]]
-) -> Union[base.UMLSResult, Sequence[base.UMLSResult]]:
+) -> Union[base.UMLSResult, Sequence[base.UMLSResult], Dict[str, Any]]:
     """
     Parses the JSON results returned from UMLS into expected Python objects.
     Input:
@@ -39,6 +39,8 @@ def parse_json_results(
         return base.Relation(**results)
     elif "classType" not in results.keys() and "relation1" in results.keys():
         return base.PairwiseRelation(**results)
+    elif "classType" not in results.keys():
+        return results
 
     if results["classType"] == "searchResults":
         return list(
